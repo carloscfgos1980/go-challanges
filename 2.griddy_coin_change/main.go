@@ -23,6 +23,9 @@ func main() {
 		fmt.Printf("Amount: %d cents\n", amount)
 		fmt.Printf("Minimum coins needed: %d\n", minCoins)
 		fmt.Printf("Coin combination: %v\n", coinCombo)
+		for denom, count := range coinCombo {
+			fmt.Printf("Denomination: %d cents, Count: %d\n", denom, count)
+		}
 		fmt.Println("---------------------------")
 	}
 }
@@ -70,6 +73,7 @@ func CoinCombination(amount int, denominations []int) map[int]int {
 	for _, coin := range denominations {
 		// Take as many coins of this denomination as possible
 		count := remainingAmount / coin
+		// Only add to the combination if we are using at least one coin of this denomination
 		if count > 0 {
 			combination[coin] = count
 		}
