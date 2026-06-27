@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"sort"
 )
@@ -14,7 +15,7 @@ func main() {
 	// Cashier's available denominations and their counts
 	cashier := map[float64]int{
 		100.00: 10,  // $100 bills
-		50.00:  20,  // $50 bills
+		50.00:  0,   // $50 bills
 		20.00:  30,  // $20 bills
 		10.00:  40,  // $10 bills
 		5.00:   50,  // $5 bills
@@ -30,12 +31,14 @@ func main() {
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
+		// Print Change calculation summary
 		totalChange := amountPaid - amountDue
 		fmt.Println("Change calculation summary")
 		fmt.Printf("Amount due:   $%.2f\n", amountDue)
 		fmt.Printf("Amount paid:  $%.2f\n", amountPaid)
 		fmt.Printf("Total change: $%.2f\n\n", totalChange)
 
+		// Separate bills and coins for better readability
 		var bills []float64
 		var coins []float64
 		for denom := range change {
@@ -46,12 +49,14 @@ func main() {
 			}
 		}
 
+		// Sort bills and coins in descending order for display
 		sort.Sort(sort.Reverse(sort.Float64Slice(bills)))
 		sort.Sort(sort.Reverse(sort.Float64Slice(coins)))
 
 		billsSubtotal := 0.0
 		coinsSubtotal := 0.0
 
+		// Print the change distribution
 		fmt.Println("Bills:")
 		if len(bills) == 0 {
 			fmt.Println("  none")
@@ -76,10 +81,12 @@ func main() {
 			}
 		}
 
+		// Print subtotals and grand total
 		fmt.Printf("\nBills subtotal: $%.2f\n", billsSubtotal)
 		fmt.Printf("Coins subtotal: $%.2f\n", coinsSubtotal)
 		fmt.Printf("Grand total:    $%.2f\n", billsSubtotal+coinsSubtotal)
 
+		// Print the remaining cashier inventory after the transaction
 		var cashierBills []float64
 		var cashierCoins []float64
 		for denom := range cashier {
@@ -134,28 +141,34 @@ func CalculateChange(amountDue float64, amountPaid float64, cashier map[float64]
 	sort.Sort(sort.Reverse(sort.IntSlice(denominations)))
 	// Iterate through the sorted denominations to calculate the change distribution
 	for _, denom := range denominations {
+		// If the remaining change is zero or less, we can break early
 		if changeCents <= 0 {
 			break
 		}
-		// Check if the cashier has any of this denomination and if it can be used for the change
+		log.Printf("Processing denomination: %d cents, Change left: %d cents\n", denom, changeCents)
+		// value of the denomination in float64 for logging and map access
 		denomValue := denomByCents[denom]
-		// Calculate how many of this denomination can be used
+		log.Printf("Cashier has %d of $%.2f\n", cashier[denomValue], denomValue)
+		// If the cashier has this denomination and the change left is greater than or equal to the denomination, we can use it
 		if cashier[denomValue] > 0 && changeCents >= denom {
 			numBillsCoins := changeCents / denom // Calculate the maximum number of this denomination that can be used
 			// Ensure we don't use more than what the cashier has
 			if numBillsCoins > cashier[denomValue] {
 				numBillsCoins = cashier[denomValue]
+				log.Printf("Limited by cashier's inventory. Using %d of $%.2f\n", numBillsCoins, denomValue)
 			}
 			// Update the change distribution and the remaining change
 			if numBillsCoins > 0 {
 				changeDistribution[denomValue] = numBillsCoins
 				changeCents -= numBillsCoins * denom
 				cashier[denomValue] -= numBillsCoins
+				log.Printf("Using %d of $%.2f, Change left: %d cents\n", numBillsCoins, denomValue, changeCents)
 			}
 		}
 	}
 	// If there is still change left to give, it means the cashier doesn't have enough denominations to provide the exact change
 	if changeCents > 0 {
+		log.Printf("Insufficient change available. Change left: %d cents\n", changeCents)
 		return nil, fmt.Errorf("insufficient change available")
 	}
 	// Return the calculated change distribution
