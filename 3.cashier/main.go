@@ -4,13 +4,19 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"os"
 	"sort"
+	"strconv"
 )
 
 func main() {
-	// Example usage of the CalculateChange function
-	amountDue := 13.37
-	amountPaid := 100.00
+	amountDue, amountPaid, err := parseAmountsFromCLI(os.Args)
+	if err != nil {
+		fmt.Println("Error:", err)
+		fmt.Println("Usage: go run ./3.cashier <amountDue> <amountPaid>")
+		fmt.Println("Example: go run ./3.cashier 13.37 100.00")
+		return
+	}
 
 	// Cashier's available denominations and their counts
 	cashier := map[float64]int{
@@ -111,6 +117,24 @@ func main() {
 			fmt.Printf("  $%6.2f -> %d\n", denom, cashier[denom])
 		}
 	}
+}
+
+func parseAmountsFromCLI(args []string) (float64, float64, error) {
+	if len(args) != 3 {
+		return 0, 0, fmt.Errorf("expected 2 arguments, got %d", len(args)-1)
+	}
+
+	amountDue, err := strconv.ParseFloat(args[1], 64)
+	if err != nil {
+		return 0, 0, fmt.Errorf("invalid amountDue: %w", err)
+	}
+
+	amountPaid, err := strconv.ParseFloat(args[2], 64)
+	if err != nil {
+		return 0, 0, fmt.Errorf("invalid amountPaid: %w", err)
+	}
+
+	return amountDue, amountPaid, nil
 }
 
 func CalculateChange(amountDue float64, amountPaid float64, cashier map[float64]int) (map[float64]int, error) {
