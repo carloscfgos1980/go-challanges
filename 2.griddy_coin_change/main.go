@@ -33,6 +33,10 @@ func main() {
 // MinCoins returns the minimum number of coins needed to make the given amount.
 // If the amount cannot be made with the given denominations, return -1.
 func MinCoins(amount int, denominations []int) int {
+	if amount < 0 {
+		return -1
+	}
+
 	// Sort denominations in descending order
 	sort.Sort(sort.Reverse(sort.IntSlice(denominations)))
 	// Initialize variables to keep track of the number of coins used and the remaining amount
@@ -64,6 +68,10 @@ func MinCoins(amount int, denominations []int) int {
 // coins used for each denomination.
 // If the amount cannot be made with the given denominations, return an empty map.
 func CoinCombination(amount int, denominations []int) map[int]int {
+	if amount < 0 {
+		return map[int]int{}
+	}
+
 	// Sort denominations in descending order
 	sort.Sort(sort.Reverse(sort.IntSlice(denominations)))
 
