@@ -25,6 +25,7 @@ func (m *Manager) RemoveEmployee(id int) {
 			m.Employees = append(m.Employees[:i], m.Employees[i+1:]...)
 		}
 	}
+	fmt.Printf("Employee with ID %d removed\n", id)
 }
 
 // GetAverageSalary calculates the average salary of all employees.
@@ -47,18 +48,4 @@ func (m *Manager) FindEmployeeByID(id int) *Employee {
 		}
 	}
 	return nil
-}
-
-func main() {
-	manager := Manager{}
-	manager.AddEmployee(Employee{ID: 1, Name: "Alice", Age: 30, Salary: 70000})
-	manager.AddEmployee(Employee{ID: 2, Name: "Bob", Age: 25, Salary: 65000})
-	manager.RemoveEmployee(1)
-	averageSalary := manager.GetAverageSalary()
-	employee := manager.FindEmployeeByID(2)
-
-	fmt.Printf("Average Salary: %f\n", averageSalary)
-	if employee != nil {
-		fmt.Printf("Employee found: %+v\n", *employee)
-	}
 }
