@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"sort"
 	"strings"
 
-	datamanagement "github.com/carloscfgos1980/go-challanges/7.data_management"
-	reversestring "github.com/carloscfgos1980/go-challanges/8.reverse_string"
+	datamanagement "github.com/carloscfgos1980/go-challanges/biginner/7.data_management"
+	reversestring "github.com/carloscfgos1980/go-challanges/biginner/8.reverse_string"
+	contextmanagement "github.com/carloscfgos1980/go-challanges/intermediate/1.context_management"
 )
 
 func main() {
@@ -38,6 +40,24 @@ func main() {
 			input := os.Args[2]
 			output := reversestring.ReverseString(input)
 			fmt.Println(output)
+		},
+		"context": func() {
+			fmt.Println("Context Management Challenge")
+			fmt.Println("Implement the context manager methods!")
+
+			// Example of how the context manager should work:
+			cm := contextmanagement.NewContextManager()
+
+			// Create a cancellable context
+			ctx, cancel := cm.CreateCancellableContext(context.Background())
+			defer cancel()
+
+			// Add some values
+			ctx = cm.AddValue(ctx, "user", "alice")
+			ctx = cm.AddValue(ctx, "requestID", "12345")
+
+			// Use the context
+			fmt.Println("Context created with values!")
 		},
 	}
 	if len(os.Args) < 2 {
