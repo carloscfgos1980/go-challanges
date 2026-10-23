@@ -28,8 +28,8 @@ type ContextManager interface {
 }
 
 // Simple context manager implementation
-type simpleContextManager struct{
-    ctx context.Context
+type simpleContextManager struct {
+	ctx context.Context
 }
 
 // NewContextManager creates a new context manager
@@ -39,7 +39,7 @@ func NewContextManager() ContextManager {
 
 // CreateCancellableContext creates a cancellable context
 func (cm *simpleContextManager) CreateCancellableContext(parent context.Context) (context.Context, context.CancelFunc) {
-    ctx, cancel := context.WithCancel(parent)
+	ctx, cancel := context.WithCancel(parent)
 	// TODO: Implement cancellable context creation
 	// Hint: Use context.WithCancel(parent)
 	return ctx, cancel
@@ -68,7 +68,7 @@ func (cm *simpleContextManager) GetValue(ctx context.Context, key interface{}) (
 	// Return the value and a boolean indicating if it was found
 	value := ctx.Value(key)
 	if value == nil {
-	    return nil, false
+		return nil, false
 	}
 	return value, true
 }
@@ -79,17 +79,17 @@ func (cm *simpleContextManager) ExecuteWithContext(ctx context.Context, task fun
 	// Hint: Run the task in a goroutine and use select with ctx.Done()
 	// Return context error if cancelled, task error if task fails
 	done := make(chan error, 1)
-    
-    go func() {
-        done <- task()
-    }()
-    
-    select {
-    case err := <-done:
-        return err // Task completed first
-    case <-ctx.Done():
-        return ctx.Err() // Context cancelled/timeout first
-    }
+
+	go func() {
+		done <- task()
+	}()
+
+	select {
+	case err := <-done:
+		return err // Task completed first
+	case <-ctx.Done():
+		return ctx.Err() // Context cancelled/timeout first
+	}
 }
 
 // WaitForCompletion waits for a duration or until context is cancelled
@@ -120,7 +120,7 @@ func SimulateWork(ctx context.Context, workDuration time.Duration, description s
 		fmt.Println(description)
 		return nil
 	}
-	
+
 }
 
 // Helper function - process multiple items with context
@@ -141,24 +141,4 @@ func ProcessItems(ctx context.Context, items []string) ([]string, error) {
 	}
 
 	return results, nil
-}
-
-// Example usage
-func main() {
-	fmt.Println("Context Management Challenge")
-	fmt.Println("Implement the context manager methods!")
-
-	// Example of how the context manager should work:
-	cm := NewContextManager()
-
-	// Create a cancellable context
-	ctx, cancel := cm.CreateCancellableContext(context.Background())
-	defer cancel()
-
-	// Add some values
-	ctx = cm.AddValue(ctx, "user", "alice")
-	ctx = cm.AddValue(ctx, "requestID", "12345")
-
-	// Use the context
-	fmt.Println("Context created with values!")
 }
