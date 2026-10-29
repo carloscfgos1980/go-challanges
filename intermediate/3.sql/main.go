@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -72,8 +73,18 @@ func (ps *ProductStore) CreateProduct(product *Product) error {
 // GetProduct retrieves a product by ID
 func (ps *ProductStore) GetProduct(id int64) (*Product, error) {
 	// TODO: Query the database for a product with the given ID
+	row := ps.db.QueryRow("SELECT id, name, price, quantity, category FROM products WHERE id = ?", id)
+
 	// TODO: Return a Product struct populated with the data or an error if not found
-	return nil, errors.New("not implemented")
+    p := &Product{}
+    err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Quantity, &p.Category)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return nil, fmt.Errorf("product with ID %d not found", id)
+        }
+        return nil, err
+    }
+	return p, nil
 }
 
 // UpdateProduct updates an existing product
