@@ -95,10 +95,18 @@ func (ps *ProductStore) UpdateProduct(product *Product) error {
     }
     defer stmt.Close()
     
-    _, err := stmt.Exec(product.Quantity, product.ID)
 	// TODO: Return an error if the product doesn't exist
+    result, err := stmt.Exec(product.Quantity, product.ID)
     if err != nil {
         return err
+    }
+    rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        return err
+    }
+    
+    if rowsAffected == 0 {
+        return fmt.Errorf("product with ID %d not found", product.ID)
     }
 	return nil
 }
