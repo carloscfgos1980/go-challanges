@@ -113,9 +113,20 @@ func (ps *ProductStore) UpdateProduct(product *Product) error {
 
 // DeleteProduct removes a product by ID
 func (ps *ProductStore) DeleteProduct(id int64) error {
-	// TODO: Delete the product from the database
-	// TODO: Return an error if the product doesn't exist
-	return errors.New("not implemented")
+	result, err := ps.db.Exec("DELETE FROM products WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("product with ID %d not found", id)
+	}
+
+	return nil
 }
 
 // ListProducts returns all products with optional filtering by category
