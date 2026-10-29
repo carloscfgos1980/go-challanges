@@ -53,8 +53,7 @@ func InitDB(dbPath string) (*sql.DB, error) {
 // CreateProduct adds a new product to the database
 func (ps *ProductStore) CreateProduct(product *Product) error {
 	// TODO: Insert the product into the database
-	result, err := ps.db
-	.Exec(
+	result, err := ps.db.Exec(
     "INSERT INTO products (name, price, quantity, category) VALUES (?, ?, ?, ?)",
     product.Name, product.Price, product.Quantity, product.Category
     )
@@ -90,8 +89,18 @@ func (ps *ProductStore) GetProduct(id int64) (*Product, error) {
 // UpdateProduct updates an existing product
 func (ps *ProductStore) UpdateProduct(product *Product) error {
 	// TODO: Update the product in the database
+	stmt, err := ps.db.Prepare("UPDATE products SET quantity = ? WHERE id = ?")
+    if err != nil {
+        return err
+    }
+    defer stmt.Close()
+    
+    _, err := stmt.Exec(product.Quantity, product.ID)
 	// TODO: Return an error if the product doesn't exist
-	return errors.New("not implemented")
+    if err != nil {
+        return err
+    }
+	return nil
 }
 
 // DeleteProduct removes a product by ID
