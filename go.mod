@@ -5,6 +5,7 @@ go 1.26.4
 require google.golang.org/grpc v1.84.0
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.52 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
