@@ -9,7 +9,7 @@ import (
 
 	datamanagement "github.com/carloscfgos1980/go-challanges/biginner/7.data_management"
 	reversestring "github.com/carloscfgos1980/go-challanges/biginner/8.reverse_string"
-	contextmanagement "github.com/carloscfgos1980/go-challanges/intermediate/1.context_management"
+	contextmanagement "github.com/carloscfgos1980/go-challanges/intermediate/30.context_management"
 )
 
 func main() {
