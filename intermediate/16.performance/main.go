@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sort"
 	"strings"
 	"time"
 )
@@ -13,13 +14,14 @@ func SlowSort(data []int) []int {
 	copy(result, data)
 
 	// Bubble sort implementation
-	for i := 0; i < len(result); i++ {
-		for j := 0; j < len(result)-1; j++ {
-			if result[j] > result[j+1] {
-				result[j], result[j+1] = result[j+1], result[j]
-			}
-		}
-	}
+	// 	for i := 0; i < len(result); i++ {
+	// 		for j := 0; j < len(result)-1; j++ {
+	// 			if result[j] > result[j+1] {
+	// 				result[j], result[j+1] = result[j+1], result[j]
+	// 			}
+	// 		}
+	// 	}
+	sort.Ints(result)
 
 	return result
 }
