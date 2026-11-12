@@ -21,7 +21,9 @@ func SlowSort(data []int) []int {
 	// 			}
 	// 		}
 	// 	}
-	sort.Ints(result)
+	for i := 0; i < len(result)/2; i++ {
+		result[i], result[len(result)-1-i] = result[len(result)-1-i], result[i]
+	}
 
 	return result
 }
@@ -31,21 +33,35 @@ func SlowSort(data []int) []int {
 func OptimizedSort(data []int) []int {
 	// TODO: Implement a more efficient sorting algorithm
 	// Hint: Consider using sort package or a more efficient algorithm
-	return SlowSort(data) // Replace this with your optimized implementation
+	result := make([]int, len(data))
+	copy(result, data)
+	sort.Ints(result)
+	return result
+	// return SlowSort(data) // Replace this with your optimized implementation
 }
 
 // InefficientStringBuilder builds a string by repeatedly concatenating
 // TODO: Optimize this function to be more efficient
 func InefficientStringBuilder(parts []string, repeatCount int) string {
-	result := ""
+	// result := ""
+
+	// for i := 0; i < repeatCount; i++ {
+	// 	for _, part := range parts {
+	// 		result += part
+	// 	}
+	// }
+	// return result
+
+	var builder strings.Builder
 
 	for i := 0; i < repeatCount; i++ {
-		for _, part := range parts {
-			result += part
+		for _, s := range parts {
+			builder.WriteString(s)
 		}
 	}
 
-	return result
+	return builder.String()
+
 }
 
 // OptimizedStringBuilder is your optimized version of InefficientStringBuilder
