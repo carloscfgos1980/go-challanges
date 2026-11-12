@@ -43,14 +43,38 @@ func OptimizedSort(data []int) []int {
 // InefficientStringBuilder builds a string by repeatedly concatenating
 // TODO: Optimize this function to be more efficient
 func InefficientStringBuilder(parts []string, repeatCount int) string {
-	// result := ""
+	result := ""
 
 	// for i := 0; i < repeatCount; i++ {
 	// 	for _, part := range parts {
 	// 		result += part
 	// 	}
 	// }
-	// return result
+
+	result = strings.Join(parts, " ")
+	for i := 1; i < repeatCount; i++ {
+		result += " " + strings.Join(parts, " ")
+	}
+	return result
+
+	// var builder strings.Builder
+
+	// for i := 0; i < repeatCount; i++ {
+	// 	for _, s := range parts {
+	// 		builder.WriteString(s)
+	// 	}
+	// }
+
+	// return builder.String()
+
+}
+
+// OptimizedStringBuilder is your optimized version of InefficientStringBuilder
+// It should produce identical results but perform better
+func OptimizedStringBuilder(parts []string, repeatCount int) string {
+	// TODO: Implement a more efficient string building method
+	// Hint: Consider using strings.Builder or bytes.Buffer
+	// return InefficientStringBuilder(parts, repeatCount) // Replace this with your optimized implementation
 
 	var builder strings.Builder
 
@@ -61,15 +85,6 @@ func InefficientStringBuilder(parts []string, repeatCount int) string {
 	}
 
 	return builder.String()
-
-}
-
-// OptimizedStringBuilder is your optimized version of InefficientStringBuilder
-// It should produce identical results but perform better
-func OptimizedStringBuilder(parts []string, repeatCount int) string {
-	// TODO: Implement a more efficient string building method
-	// Hint: Consider using strings.Builder or bytes.Buffer
-	return InefficientStringBuilder(parts, repeatCount) // Replace this with your optimized implementation
 }
 
 // ExpensiveCalculation performs a computation with redundant work
